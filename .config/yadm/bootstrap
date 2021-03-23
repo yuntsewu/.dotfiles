@@ -1,0 +1,30 @@
+#!/bin/sh
+
+# Because Git submodule commands cannot operate without a work tree, they must
+# be run from within $HOME (assuming this is the root of your dotfiles)
+cd "$HOME"
+
+echo "Init submodules"
+yadm submodule update --recursive --init
+
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    echo "This is a Linux system, nice."
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+    echo "Dealing with OSX crap"
+    if ! command -v brew >/dev/null 2>&1; then
+        echo "Installing homebrew"
+        /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    fi
+    if [ -f "$HOME/.Brewfile" ]; then
+        echo "Updating homebrew bundle"
+        brew bundle --global
+    fi
+fi
+
+if command -v vim >/dev/null 2>&1; then
+  echo "Bootstraping Vim"
+  vim '+PlugUpdate' '+PlugClean!' '+PlugUpdate' '+qall'
+fi
+
+echo "Updating the yadm repo origin URL"
+yadm remote set-url origin git@github.com:yuntsewu/.dotfiles.git 
