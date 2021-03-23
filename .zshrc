@@ -99,3 +99,14 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+# npm local settings
+if [ -d ~/.npm-packages ]; then
+    NPM_PACKAGES="${HOME}/.npm-packages"
+    export PATH="$PATH:$NPM_PACKAGES/bin"
+    # Preserve MANPATH if you already defined it somewhere in your config.
+    # Otherwise, fall back to `manpath` so we can inherit from `/etc/manpath`.
+    export MANPATH="${MANPATH-$(manpath)}:$NPM_PACKAGES/share/man"
+else
+    print "404: ~/.npm-packages not found.\nmkdir ~/.npm-packages\nnpm config set prefix "${HOME}/.npm-packages""
+fi
