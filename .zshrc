@@ -109,4 +109,6 @@ if [ -d ~/.npm-packages ]; then
     export MANPATH="${MANPATH-$(manpath)}:$NPM_PACKAGES/share/man"
 else
     print "404: ~/.npm-packages not found.\nmkdir ~/.npm-packages\nnpm config set prefix "${HOME}/.npm-packages""
+    mkdir ~/.npm-packages
+    npm config set prefix "${HOME}/.npm-packages"
 fi
