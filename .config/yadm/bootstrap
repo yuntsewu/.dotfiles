@@ -9,6 +9,23 @@ yadm submodule update --recursive --init
 
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     echo "This is a Linux system, nice."
+    sudo apt update
+    sudo apt install vim tmux zsh htop curl git nodejs npm -y
+    sudo snap install spotifyd -y
+    sudo snap install spotify -y
+    sudo snap install discord -y
+    sudo snap install slack --classic -y
+    sudo snap install code --classic -y
+    # cava
+    sudo add-apt-repository ppa:hsheth2/ppa -y
+    sudo apt update
+    sudo apt install cava -y
+    # tlp
+    sudo add-apt-repository ppa:linrunner/tlp -y
+    sudo apt update
+    sudo apt install tlp tlp-rdw -y
+    sudo apt install acpi-call-dkms tp-smapi-dkms -y
+    sudo tlp start
 elif [[ "$OSTYPE" == "darwin"* ]]; then
     echo "Dealing with OSX crap"
     if ! command -v brew >/dev/null 2>&1; then
