@@ -1,38 +1,13 @@
-# If you come from bash you might have to change your $PATH.
 export PATH=$HOME/bin:/usr/local/bin:$PATH
-
-# Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
-
-# THEME
 ZSH_THEME="robbyrussell"
-
-# Uncomment the following line to enable command auto-correction.
-ENABLE_CORRECTION="true"
 
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
 # much, much faster.
 DISABLE_UNTRACKED_FILES_DIRTY="true"
 
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# You can set one of the optional three formats:
-# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# or set a custom format using the strftime function format specifications,
-# see 'man strftime' for details.
-# HIST_STAMPS="mm/dd/yyyy"
-
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
-
-# Which plugins would you like to load?
-# Standard plugins can be found in $ZSH/plugins/
-# Custom plugins may be added to $ZSH_CUSTOM/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
 plugins=(git)
-
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
@@ -48,6 +23,19 @@ else
   export EDITOR='mvim'
 fi
 
+if [ ! -f ~/.kinit_auth ]; then
+    read -p "Enter Amazon corp password: " amazon_password
+fi
+echo $amazon_password > .kinit_auth
+
+if [ ! -f ~/.nextcloud_auth ]; then
+    read -p "Enter NextCloud password: " nextcloud_password
+fi
+echo $nextcloud_password > .nextcloud_auth
+
+
+alias fj='kinit --password-file=.kinit_auth -f && mwinit -o'
+
 # npm local settings
 if [ -d ~/.npm-packages ]; then
     NPM_PACKAGES="${HOME}/.npm-packages"
@@ -59,6 +47,20 @@ else
     print "404: ~/.npm-packages not found.\nmkdir ~/.npm-packages\nnpm config set prefix "${HOME}/.npm-packages""
     mkdir ~/.npm-packages
     npm config set prefix "${HOME}/.npm-packages"
+    npm install -g \
+        expo-cli \
+        joplin
+    
+    # setup joplin for first time
+    export NEXTCLOUD_PASS=$(cat $HOME/.nextcloud_auth)
+    unsetopt correct_all # Turn off annoying auto correct messages
+    joplin config sync.target 5
+    joplin config sync.5.path https://cloud.yuntsewu.com/remote.php/dav/files/ytw/Documents/Notes
+    joplin config sync.5.username ytw
+    joplin config sync.5.password $NEXTCLOUD_PASS
+    joplin config editor vim
+    joplin sync
+    joplin export ~/notes/ --format md
 fi
 
 
