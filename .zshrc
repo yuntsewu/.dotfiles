@@ -23,18 +23,9 @@ else
   export EDITOR='mvim'
 fi
 
-if [ ! -f ~/.kinit_auth ]; then
-    read -p "Enter Amazon corp password: " amazon_password
-fi
-echo $amazon_password > .kinit_auth
-
-if [ ! -f ~/.nextcloud_auth ]; then
-    read -p "Enter NextCloud password: " nextcloud_password
-fi
-echo $nextcloud_password > .nextcloud_auth
 
 
-alias fj='kinit --password-file=.kinit_auth -f && mwinit -o'
+alias fj='kinit --password-file=$HOME/.kinit_auth -f && mwinit -o'
 
 # npm local settings
 if [ -d ~/.npm-packages ]; then
@@ -44,6 +35,15 @@ if [ -d ~/.npm-packages ]; then
     # Otherwise, fall back to `manpath` so we can inherit from `/etc/manpath`.
     export MANPATH="${MANPATH-$(manpath)}:$NPM_PACKAGES/share/man"
 else
+    if [ ! -f $HOME/.kinit_auth ]; then
+        read -p "Enter Amazon corp password: " amazon_password
+    fi
+    echo $amazon_password > .kinit_auth
+
+    if [ ! -f $HOME/.nextcloud_auth ]; then
+        read -p "Enter NextCloud password: " nextcloud_password
+    fi
+    echo $nextcloud_password > .nextcloud_auth
     print "404: ~/.npm-packages not found.\nmkdir ~/.npm-packages\nnpm config set prefix "${HOME}/.npm-packages""
     mkdir ~/.npm-packages
     npm config set prefix "${HOME}/.npm-packages"
