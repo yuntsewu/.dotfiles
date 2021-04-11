@@ -1,5 +1,5 @@
 # This is Git's per-user configuration file.
 [user]
 # Please adapt and uncomment the following lines:
-	name = "Yun Tse Wu"
-	email = "windsor106@gmail.com"
+	name = Yun Tse Wu
+	email = windsor106@gmail.com
