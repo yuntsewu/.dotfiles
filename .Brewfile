@@ -1,4 +1,6 @@
 brew "node"
 brew "tmux"
 brew "ranger"
+brew "tcl-tk"
 cask "rectangle"
+cask "docker"
